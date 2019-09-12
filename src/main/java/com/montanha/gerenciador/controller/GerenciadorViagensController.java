@@ -1,21 +1,21 @@
 package com.montanha.gerenciador.controller;
 
-import java.net.URI;
-import java.util.List;
-import javax.validation.Valid;
-
-//import org.apache.coyote.Response;
+import com.montanha.gerenciador.dtos.ViagemDto;
+import com.montanha.gerenciador.entities.Viagem;
+import com.montanha.gerenciador.responses.Response;
+import com.montanha.gerenciador.services.ViagemServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import com.montanha.gerenciador.entities.Viagem;
 
-import com.montanha.gerenciador.dtos.ViagemDto;
-import com.montanha.gerenciador.responses.Response;
-import com.montanha.gerenciador.services.ViagemServices;
+import javax.validation.Valid;
+import java.net.URI;
+import java.util.List;
+
+//import org.apache.coyote.Response;
 
 @RestController
 @RequestMapping("/api/viagens")
@@ -58,8 +58,17 @@ public class GerenciadorViagensController {
 
     //DELETE by id
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<List<Viagem>> deletar(@PathVariable("id") Long id) throws Exception {
-        List<Viagem> viagens = viagemServices.deletar(id);
-        return ResponseEntity.status(HttpStatus.OK).body(viagens);
+    public ResponseEntity deletar(@PathVariable("id") Long id) throws Exception {
+        viagemServices.deletar(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<Response<Viagem>> atualizar(@RequestBody ViagemDto viagemDto, @PathVariable("id") Long id) throws Exception {
+        viagemDto.setId(id);
+        Viagem viagem = viagemServices.atualizar(viagemDto);
+        Response<Viagem> response = new Response<Viagem>();
+        response.setData(viagem);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }

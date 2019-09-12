@@ -37,14 +37,26 @@ public class ViagemServices {
         return viagem;
     }
 
-    public List<Viagem> deletar(Long id) throws Exception {
+    public void deletar(Long id) throws Exception {
         Viagem viagem = viagemRepository.findOne(id);
 
         if (viagem == null) {
             throw new Exception("Não existe esta viagem cadastrada");
-        }else{
-            viagemRepository.delete(viagem);
         }
-        return viagemRepository.findAll();
+        viagemRepository.delete(viagem);
+    }
+
+    public Viagem atualizar(ViagemDto viagemDto) throws Exception {
+        Viagem viagem = viagemRepository.findOne(viagemDto.getId());
+        if (viagem == null){
+            throw new Exception("Não existe esta viagem cadastrada");
+        }
+        viagem.setLocalDeDestino(viagemDto.getLocalDeDestino());
+        viagem.setDataPartida(viagemDto.getDataPartida());
+        viagem.setDataRetorno(viagemDto.getDataRetorno());
+        viagem.setAcompanhante(viagemDto.getAcompanhante());
+        viagem.setAcompanhante(viagemDto.getAcompanhante());
+
+        return viagemRepository.save(viagem);
     }
 }
