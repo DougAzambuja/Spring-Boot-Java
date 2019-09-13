@@ -1,3 +1,9 @@
 
 # Default ignored files
 /workspace.xml
+target/
+.metadata/
+.settings/
+.idea/
+.classpath
+Project_API.iml
